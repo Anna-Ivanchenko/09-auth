@@ -1,15 +1,19 @@
-import css from "./layout.module.css";
+import css from '../LayoutNotes.module.css';
 
-interface FilterLayoutProps {
+export default function LayoutNotes({
+  children,
+  sidebar,
+}: Readonly<{
   children: React.ReactNode;
   sidebar: React.ReactNode;
-}
-
-export default function FilterLayout({ children, sidebar }: FilterLayoutProps) {
+}>) {
   return (
-    <div className={css.layout}>
-      <aside className={css.sidebar}>{sidebar}</aside>
-      <main className={css.main}>{children}</main>
+    <div className={css.container}>
+      <div className={css.sidebar}>
+        <div className={css.notesWrapper}>{sidebar}</div>
+      </div>
+
+      {children}
     </div>
   );
 }
