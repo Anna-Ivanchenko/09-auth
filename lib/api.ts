@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { type Note } from '../types/note';
 import { type NoteTag } from '../types/note';
+
 interface FetchNotesParams {
   page: number;
   perPage?: number;
@@ -12,11 +13,11 @@ interface NotesResponse {
   notes: Note[];
   totalPages: number;
 }
-interface CreateNoteDto {
+export type CreateNoteDto = {
   title: string;
   content: string;
   tag: NoteTag;
-}
+};
 
 const NEXT_PUBLIC_NOTEHUB_TOKEN = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
 
