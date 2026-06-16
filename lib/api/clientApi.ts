@@ -72,7 +72,8 @@ export const logout = async (): Promise<void> => {
 };
 export const checkSession = async (): Promise<User | null> => {
   const { data } = await api.get<User | null>('/auth/session');
-  return data ?? null;
+  if (!data || !('email' in data)) return null;
+  return data;
 };
 export const getMe = async (): Promise<User> => {
   const { data } = await api.get<User>('/users/me');
