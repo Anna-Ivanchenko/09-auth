@@ -3,9 +3,9 @@ import {
   QueryClient,
   dehydrate,
 } from '@tanstack/react-query';
-import { getSingleNote } from '@/lib/api';
+import { fetchNoteById } from '@/lib/api/serverApi';
 import type { Metadata } from 'next';
-import NotePreviewClient from '../../@modal/(.)notes/[id]/NotePreview.client';
+import NotePreviewClient from '../../../@modal/(.)notes/[id]/NotePreview.client';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -20,7 +20,7 @@ export async function generateMetadata({
   params,
 }: GenerateMetadataProps): Promise<Metadata> {
   const { id } = await params;
-  const note = await getSingleNote(id);
+  const note = await fetchNoteById(id);
   return {
     title: `${note.title}`,
     description: `${note.content.slice(0, 100)}...`,
@@ -48,7 +48,7 @@ const NoteDetails = async ({ params }: Props) => {
 
   await queryClient.prefetchQuery({
     queryKey: ['note', id],
-    queryFn: () => getSingleNote(id),
+    queryFn: () => fetchNoteById(id),
   });
 
   return (

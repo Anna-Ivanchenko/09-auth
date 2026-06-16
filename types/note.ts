@@ -1,4 +1,4 @@
-export type NoteTag = "Todo" | "Work" | "Personal" | "Meeting" | "Shopping";
+export type NoteTag = 'Todo' | 'Work' | 'Personal' | 'Meeting' | 'Shopping';
 
 export interface Note {
   id: string;
@@ -7,4 +7,13 @@ export interface Note {
   createdAt: string;
   updatedAt: string;
   tag: NoteTag;
+}
+
+export interface ApiError {
+  message: string;
+  response?: {
+    data?: {
+      error?: string;
+    };
+  };
 }

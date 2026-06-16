@@ -1,8 +1,9 @@
 import css from './NoteList.module.css';
 import type { Note } from '../../types/note';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteNote } from '../../lib/api';
+import { deleteNote } from '../../lib/api/clientApi';
 import Link from 'next/link';
+
 interface NoteListProps {
   notes: Note[];
 }
@@ -33,8 +34,7 @@ export default function NoteList({ notes }: NoteListProps) {
             <button
               className={css.button}
               onClick={() => handleDelete(note.id)}
-              disabled={mutation.isPending}
-            >
+              disabled={mutation.isPending}>
               Delete
             </button>
           </div>

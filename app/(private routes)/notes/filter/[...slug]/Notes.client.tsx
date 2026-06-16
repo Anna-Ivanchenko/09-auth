@@ -2,15 +2,16 @@
 
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import css from './Notes.module.css';
-import Pagination from '../../../../components/Pagination/Pagination';
-import SearchBox from '../../../../components/SearchBox/SearchBox';
+import Pagination from '../../../../../components/Pagination/Pagination';
+import SearchBox from '../../../../../components/SearchBox/SearchBox';
 import { useState } from 'react';
-import { fetchNotes } from '../../../../lib/api';
-import NoteList from '../../../../components/NoteList/NoteList';
+import { fetchNotes } from '../../../../../lib/api/clientApi';
+import NoteList from '../../../../../components/NoteList/NoteList';
 import { useDebouncedCallback } from 'use-debounce';
 import { Toaster } from 'react-hot-toast';
 import { NoteTag } from '@/types/note';
 import Link from 'next/link';
+import { useAuthStore } from '@/lib/store/authStore';
 
 type Props = {
   tag?: NoteTag;
@@ -41,6 +42,8 @@ function Notes({ tag }: Props) {
 
   const isEmpty = isSuccess && notes.length === 0;
 
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
+
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
@@ -60,8 +63,9 @@ function Notes({ tag }: Props) {
           Create note +
         </Link>
       </header>
-
-      {isEmpty ? (
+      {!isAuthenticated ? (
+        <p>Please login</p>
+      ) : isEmpty ? (
         <p>
           {tag || querySe ? 'No notes found for this filter' : 'No notes yet'}
         </p>

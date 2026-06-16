@@ -4,7 +4,7 @@ import { Roboto } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
-
+import AuthProvider from '@/components/AuthProvider/AuthProvider';
 import TanStackProvider from '../components/TanStackProvider/TanStackProvider';
 const roboto = Roboto({
   subsets: ['latin'],
@@ -14,12 +14,12 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: '08-zustand',
+  title: '09-auth',
   description: 'Application for creating and managing notes',
   openGraph: {
-    title: '08-zustand',
+    title: '09-auth',
     description: 'Application for creating and managing notes',
-    url: 'https://08-zustand-beryl-zeta.vercel.app/',
+    url: 'https://09-auth-seven-sandy.vercel.app/',
     images: [
       {
         url: 'https://ac.goit.global/fullstack/react/notehub-og-meta.jpg',
@@ -43,11 +43,13 @@ export default function RootLayout({
     <html lang="en" className={`${roboto.variable}`}>
       <body>
         <TanStackProvider>
-          <Header />
-          <main>
-            {children} {modal}
-          </main>
-          <Footer />
+          <AuthProvider>
+            <Header />
+            <main>
+              {children} {modal}
+            </main>
+            <Footer />
+          </AuthProvider>
         </TanStackProvider>
       </body>
     </html>
