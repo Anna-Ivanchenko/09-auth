@@ -47,17 +47,16 @@ export const fetchNoteById = async (id: string): Promise<Note> => {
   });
   return data;
 };
-export const checkSession = async () => {
+export const checkSession = async (): Promise<User | null> => {
   const cookieStore = await cookies();
-  const response = await api.get('/auth/session', {
+  const { data } = await api.get<User | null>('/auth/session', {
     headers: {
       Cookie: cookieStore.toString(),
     },
   });
-
-  return response;
+  return data ?? null;
 };
-export const getMe = async () => {
+export const getMe = async (): Promise<User> => {
   const cookieStore = await cookies();
   const { data } = await api.get('/users/me', {
     headers: {

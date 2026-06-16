@@ -70,9 +70,9 @@ export const login = async (loginData: RegisterRequest): Promise<User> => {
 export const logout = async (): Promise<void> => {
   await api.post('/auth/logout');
 };
-export const checkSession = async (): Promise<User> => {
-  const { data } = await api.get<User>('/auth/session');
-  return data;
+export const checkSession = async (): Promise<User | null> => {
+  const { data } = await api.get<User | null>('/auth/session');
+  return data ?? null;
 };
 export const getMe = async (): Promise<User> => {
   const { data } = await api.get<User>('/users/me');

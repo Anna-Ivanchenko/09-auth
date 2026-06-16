@@ -19,11 +19,11 @@ const AuthProvider = ({ children }: Props) => {
   useEffect(() => {
     const fetchUser = async () => {
       // Перевіряємо сесію
-      const isAuthenticated = await checkSession();
-      if (isAuthenticated) {
+      const user = await checkSession();
+      if (user) {
         // Якщо сесія валідна — отримуємо користувача
-        const user = await getMe();
-        if (user) setUser(user);
+        const me = await getMe();
+        if (me) setUser(me);
       } else {
         // Якщо сесія невалідна — чистимо стан
         clearIsAuthenticated();
@@ -32,7 +32,7 @@ const AuthProvider = ({ children }: Props) => {
     fetchUser();
   }, [setUser, clearIsAuthenticated]);
 
-  return children;
+  return <>{children}</>;
 };
 
 export default AuthProvider;
