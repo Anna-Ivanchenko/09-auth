@@ -2,42 +2,35 @@
 import { useRouter } from 'next/navigation';
 import css from './EditProfilePage.module.css';
 import { updateMe } from '@/lib/api/clientApi';
-import { useState, useEffect } from 'react';
-import { getMe } from '@/lib/api/clientApi';
-import { User } from '@/types/user';
+import { useState } from 'react';
 import { ApiError } from '../../../../types/note';
 import { useAuthStore } from '@/lib/store/authStore';
 import Image from 'next/image';
+
 type NoteFormValues = {
-  avatar?: string;
-  email?: string;
   username: string;
 };
+
 export default function Edit() {
   const [error, setError] = useState('');
   const router = useRouter();
   const setUser = useAuthStore(state => state.setUser);
-  const [userData, setUserData] = useState<User | null>(null);
+  const user = useAuthStore(state => state.user);
 
-  useEffect(() => {
-    async function load() {
-      const data = await getMe();
-      setUserData(data);
-    }
+  const avatar = user?.avatar?.trim()
+    ? user.avatar
+    : 'https://ac.goit.global/fullstack/react/default-avatar.jpg';
 
-    load();
-  }, []);
   const handleSubmit = async (formData: FormData) => {
     const values = Object.fromEntries(formData) as NoteFormValues;
 
     try {
-      const user = await updateMe(values);
-      console.log(values);
-      if (user) {
-        setUser(user);
+      const updatedUser = await updateMe(values);
+      if (updatedUser) {
+        setUser(updatedUser);
         router.push('/profile');
       } else {
-        setError('Invalid email or password');
+        setError('Update failed');
       }
     } catch (error) {
       setError(
@@ -47,9 +40,7 @@ export default function Edit() {
       );
     }
   };
-  const avatar = userData?.avatar?.trim()
-    ? userData?.avatar
-    : '/default-avatar.png';
+
   return (
     <main className={css.mainContent}>
       <div className={css.profileCard}>
@@ -57,7 +48,7 @@ export default function Edit() {
 
         <Image
           src={avatar}
-          alt={userData?.username || 'User Avatar'}
+          alt={user?.username || 'User Avatar'}
           width={120}
           height={120}
           className={css.avatar}
@@ -65,17 +56,17 @@ export default function Edit() {
 
         <form className={css.profileInfo} action={handleSubmit}>
           <div className={css.usernameWrapper}>
-            <label htmlFor="username">Username:{userData?.username}</label>
+            <label htmlFor="username">Username:</label>
             <input
               id="username"
               type="text"
               name="username"
-              defaultValue={userData?.username}
+              defaultValue={user?.username}
               className={css.input}
             />
           </div>
 
-          <p>Email: {userData?.email}</p>
+          <p>Email: {user?.email}</p>
 
           <div className={css.actions}>
             <button type="submit" className={css.saveButton}>
@@ -84,13 +75,13 @@ export default function Edit() {
             <button
               type="button"
               className={css.cancelButton}
-              onClick={() => {
-                router.push('/profile');
-              }}>
+              onClick={() => router.push('/profile')}>
               Cancel
             </button>
           </div>
         </form>
+
+        {error && <p>{error}</p>}
       </div>
     </main>
   );
